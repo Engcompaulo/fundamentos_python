@@ -44,8 +44,8 @@ input("Aperte Enter para continuar...")
 
 print("\nTAREFA 2: Imprimindo o gênero das primeiras 20 amostras")
 
-for i in range(20):
-    print(data_list[i][6])
+for index in range(20):
+    print(data_list[index][6])
 
 # Ótimo! Nós podemos pegar as linhas(samples) iterando com um for, e as colunas(features) por índices.
 # Mas ainda é difícil pegar uma coluna em uma lista. Exemplo: Lista com todos os gêneros
@@ -53,16 +53,17 @@ for i in range(20):
 input("Aperte Enter para continuar...")
 # TAREFA 3
 # TODO: Crie uma função para adicionar as colunas(features) de uma lista em outra lista, na mesma ordem
-"""Esta função cria uma sub lista de uma lista maior, a partir de um indice
-   Recebe uma lista
-   Recebe um indice
-   Retorna uma lista menor a partir do indice da coluna escolhida
-"""
 def column_to_list(data, index):
+    """
+    Esta função cria uma sub lista de uma lista maior, a partir de um indice
+    Recebe uma lista
+    Recebe um indice
+    Retorna uma lista menor a partir do indice da coluna escolhida
+    """
     column_list = []
     # Dica: Você pode usar um for para iterar sobre as amostras, pegar a feature pelo seu índice, e dar append para uma lista
-    for i in range(len(data)):
-        column_list.append(data[i][index])
+    for index_data in range(len(data)):
+        column_list.append(data[index_data][index])
     print(len(column_list))
     return column_list
 
@@ -101,17 +102,18 @@ input("Aperte Enter para continuar...")
 # TAREFA 5
 # TODO: Crie uma função para contar os gêneros. Retorne uma lista.
 # Isso deveria retornar uma lista com [count_male, count_female] (exemplo: [10, 15] significa 10 Masculinos, 15 Femininos)
-"""Esta função serve para calcular a quantidade de sexos dos usuários
+def count_gender(data_list):
+    """
+    Esta função serve para calcular a quantidade de sexos dos usuários
     Recebe como input uma lista
     Retorna um lista com dois campos e com os valores totais de cada sexo
-"""
-def count_gender(data_list):
+    """
     male = 0
     female = 0
-    for i in range(len(data_list)):
-        if data_list[i][-2] == 'Male':
+    for index in range(len(data_list)):
+        if data_list[index][-2] == 'Male':
             male+=1
-        elif data_list[i][-2] == 'Female':
+        elif data_list[index][-2] == 'Female':
             female+=1
     return [male, female]
 
@@ -130,17 +132,20 @@ input("Aperte Enter para continuar...")
 # TAREFA 6
 # TODO: Crie uma função que pegue o gênero mais popular, e retorne este gênero como uma string.
 # Esperamos ver "Male", "Female", ou "Equal" como resposta.
-"""Esta funçãofoi desenvolvida para descobrir o sexo que mais utiliza as bicicletas
-   Recebe como input uma lista, no caso data_list
-   Retorna o sexo mais popular
-"""
 def most_popular_gender(data_list):
+    """
+    Esta função foi desenvolvida para descobrir o sexo que mais utiliza as bicicletas
+    Recebe como input uma lista, no caso data_list
+    Retorna o sexo mais popular
+    """
     answer = ""
     total_sexo = count_gender(data_list)
     if total_sexo[0] > total_sexo[1]:
         answer = 'Male'
-    else:
+    elif total_sexo[0] < total_sexo[1]:
         answer = 'Female'
+    else:
+        answer = 'Equal'
     return answer
 
 
@@ -168,17 +173,18 @@ input("Aperte Enter para continuar...")
 # TAREFA 7
 # TODO: Crie um gráfico similar para user_types. Tenha certeza que a legenda está correta.
 print("\nTAREFA 7: Verifique o gráfico!")
-"""Esta função serve para calcular a quantidade de tipos de usuarios
-   Recebe como input uma lista
-   Retorna um lista com dois campos e com os valores totais de tipos de usuarios
-"""
 def count_user_types(data_list):
+    """
+    Esta função serve para calcular a quantidade de tipos de usuarios
+    Recebe como input uma lista
+    Retorna um lista com dois campos e com os valores totais de tipos de usuarios
+    """
     customer = 0
     subscriber = 0
-    for i in range(len(data_list)):
-        if data_list[i][-3] == 'Customer':
+    for index in range(len(data_list)):
+        if data_list[index][-3] == 'Customer':
             customer+=1
-        elif data_list[i][-3] == 'Subscriber':
+        elif data_list[index][-3] == 'Subscriber':
             subscriber+=1
             
     return [customer, subscriber]
@@ -222,6 +228,7 @@ mean_trip = 0
 median_trip = 0
 soma = 0
 mediana_list = []
+trip_duration_list_orde = sorted(trip_duration_list)
 
 for trip_duration in trip_duration_list:
     soma+= int(trip_duration)
@@ -232,10 +239,14 @@ for trip_duration in trip_duration_list:
 
 mean_trip = soma/len(trip_duration_list)
 
-for duration_list in trip_duration_list:
-    mediana_list.append(int(duration_list))
-
-median_trip = int(sorted(mediana_list)[len(sorted(mediana_list))//2])
+if len(trip_duration_list)%2 == 0:
+    elemento_meio = int(trip_duration_list_orde[len(trip_duration_list_orde)//2])
+    elemento_meio_seguinte = int(trip_duration_list_orde[(len(trip_duration_list_orde)//2)+1])
+    median_trip = int((elemento_meio+elemento_meio_seguinte)/2)
+else:
+    for duration_list in trip_duration_list:
+        mediana_list.append(int(duration_list))
+    median_trip = int(sorted(mediana_list)[len(trip_duration_list_orde)//2])
 
 
 print("\nTAREFA 9: Imprimindo o mínimo, máximo, média, e mediana")
@@ -282,22 +293,28 @@ input("Aperte Enter para continuar...")
 # para que nós possamos usar essa função com outra categoria de dados.
 print("Você vai encarar o desafio? (yes ou no)")
 answer = 'yes'
-'''
+def count_items(column_list):
+    '''
     Esta função é geral para calcular tipos de usuários, sem definir os tipos
     Recebe como entrada uma lista
     Retornar os tipos de sexo presente
     Retorna os totais de cada sexo
-    
-'''
-def count_items(column_list):
+    '''
     item_types = []
     count_items = []
+    count = 0
     control = 0
-    item_types = (set(column_list))
+    item_types = set(column_list)
     
-    for elemento in item_types:
-       count_items.append(column_list.count(elemento))
+    #for elemento in item_types:
+       #count_items.append(column_list.count(elemento))
     
+    for index, value in enumerate(item_types):
+        for elemento in column_list:
+            if value == elemento:
+                count += 1
+        count_items.append(count)
+        count = 0
     return item_types, count_items
 
 
